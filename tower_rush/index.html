@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TOWER RUSH PREDICTOR</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --accent-yellow: #ffcc00;
+            --accent-orange: #ff8c00;
+            --accent-green: #00ff7f;
+            --text-color: #ffffff;
+            --gray-text: #888888;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .square {
+            width: 28px;
+            height: 28px;
+            background: var(--accent-yellow);
+            border-radius: 6px;
+        }
+
+        .logo span {
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .lang-box {
+            display: flex;
+            background: #252525;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--gray-text);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: #444;
+            color: #fff;
+        }
+
+        /* Текст под шапкой (скрыт по умолчанию) */
+        #instruction-bar {
+            padding: 0 5px;
+            font-size: 0.95rem;
+            display: none; /* Скрыто изначально */
+        }
+        .ok-green {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* Блок Сигнала */
+        .signal-display {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .status-label {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .screen {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #signal-value {
+            font-size: 4.5rem;
+            font-weight: 900;
+        }
+
+        /* Блок Кнопок */
+        .button-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .main-btn {
+            width: 100%;
+            background: var(--accent-orange);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .main-btn:disabled {
+            background: #444;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .back-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--gray-text);
+            border: 1px solid #333;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cooldown-timer {
+            margin: 10px 0;
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            min-height: 1.2rem;
+        }
+
+        /* Лоадер */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #333;
+            border-bottom-color: var(--accent-orange);
+            border-radius: 50%;
+            display: none;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <header>
+        <div class="logo">
+            <div class="square"></div>
+            <span>TOWER RUSH</span>
+        </div>
+        <div class="lang-box">
+            <button class="lang-btn active" onclick="changeLang('RU')">RU</button>
+            <button class="lang-btn" onclick="changeLang('EN')">EN</button>
+        </div>
+    </header>
+
+    <!-- Скрытая панель инструкции -->
+    <div id="instruction-bar">
+        <span class="ok-green">OK</span> - <span id="instruction-text"></span>
+    </div>
+
+    <div class="signal-display">
+        <div id="status-text" class="status-label">Количество блоков</div>
+        <div class="screen">
+            <div id="loader" class="loader"></div>
+            <div id="signal-value">?</div>
+        </div>
+    </div>
+
+    <div class="button-box">
+        <button id="get-signal-btn" class="main-btn" onclick="startProcess()">
+            ПОЛУЧИТЬ СИГНАЛ
+        </button>
+        <div id="timer-display" class="cooldown-timer"></div>
+<button id="back-btn" class="back-btn" onclick="window.location.href='https://vadim1700.github.io/Osnovnaya_webka/'">
+    НАЗАД
+</button>
+
+
+    </div>
+</div>
+
+<script>
+   const dictionary = {
+    RU: {
+        status: "Количество блоков",
+        btn: "ПОЛУЧИТЬ СИГНАЛ",
+        instr: "поставьте",
+        back: "НАЗАД",
+        wait: "Повторный запрос через:",
+        sec: "сек",
+        blocks: (n) => {
+            if (n % 10 === 1 && n % 100 !== 11) return "блок";
+            if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return "блока";
+            return "блоков";
+        }
+    },
+    EN: {
+        status: "Blocks count",
+        btn: "GET SIGNAL",
+        instr: "place",
+        back: "BACK",
+        wait: "Next signal in:",
+        sec: "sec",
+        blocks: (n) => n === 1 ? "block" : "blocks"
+    }
+};
+
+let currentLang = 'RU';
+let currentSignal = 0;
+let isProcessing = false;
+let isCooldown = false;
+let firstSignalReceived = false;
+
+function changeLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('onclick').includes(lang));
+    });
+    updateUI();
+}
+
+function updateUI() {
+    const d = dictionary[currentLang];
+    
+    document.getElementById('status-text').innerText = d.status;
+    document.getElementById('back-btn').innerText = d.back;
+    
+    // Всегда обновляем текст кнопки, чтобы он менялся при переключении языка
+    document.getElementById('get-signal-btn').innerText = d.btn;
+
+    if (firstSignalReceived) {
+        const blockWord = d.blocks(currentSignal);
+        document.getElementById('instruction-text').innerText = `${d.instr} ${currentSignal} ${blockWord}`;
+        document.getElementById('instruction-bar').style.display = 'block';
+    }
+}
+
+function startProcess() {
+    if (isProcessing || isCooldown) return;
+
+    const btn = document.getElementById('get-signal-btn');
+    const loader = document.getElementById('loader');
+    const valDisp = document.getElementById('signal-value');
+
+    isProcessing = true;
+    btn.disabled = true;
+    
+    valDisp.style.display = 'none';
+    loader.style.display = 'inline-block';
+
+    setTimeout(() => {
+        generateSignal();
+    }, 3000); 
+}
+
+function generateSignal() {
+    const loader = document.getElementById('loader');
+    const valDisp = document.getElementById('signal-value');
+    
+    currentSignal = Math.floor(Math.random() * 10) + 1;
+    firstSignalReceived = true;
+    
+    loader.style.display = 'none';
+    valDisp.innerText = currentSignal;
+    valDisp.style.display = 'block';
+    
+    updateUI();
+    startCooldown();
+}
+
+function startCooldown() {
+    isProcessing = false;
+    isCooldown = true;
+    let timeLeft = 5;
+    const btn = document.getElementById('get-signal-btn');
+    const timerDisp = document.getElementById('timer-display');
+
+    const interval = setInterval(() => {
+        const d = dictionary[currentLang];
+        // Обновляем таймер и текст кнопки на каждой итерации,
+        // чтобы перевод применялся мгновенно в процессе кулдауна
+        timerDisp.innerText = `${d.wait} ${timeLeft} ${d.sec}`;
+        btn.innerText = d.btn;
+        
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            isCooldown = false;
+            btn.disabled = false;
+            timerDisp.innerText = "";
+            btn.innerText = d.btn;
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+</script>
+
+</body>
+
+</html>
+
+

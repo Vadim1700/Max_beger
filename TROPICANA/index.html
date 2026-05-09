@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prosto+One&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropicana</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+    <div class="background-elements">
+        <img id="ob1" class="obloko" src="images/obl.png" alt="Cloud">
+        <img id="ob2" class="obloko2" src="images/obl.png" alt="Cloud">
+    </div>
+	
+    <div class="winner">
+        <img class="logo" src="images/logo.png">
+    </div>
+
+    <main class="main-content">
+        <div class="game-display-area">
+            <div class="iframe-clipper">
+                <!-- iframe без src -->
+                <iframe id="myIframe" scrolling="no" onload="hideElements()"></iframe>
+            </div>
+        </div>
+
+        <div class="predictions-panel">
+            <div class="panel-decoration"></div>
+            <div class="pred-txt">
+                <a>NEXT ROUND PREDICTIONS</a>
+            </div>
+            <div id="responseText" class="text prediction-value"></div>
+            <div id="coefficients" class="text coefficient-value"></div>
+        </div>
+    </main>
+
+    <nav class="bottom-navigation">
+        <div class="tab-bar">
+            <button class="tab-button games-icon" data-tab="Games" onclick="window.location.href='https://vadim1700.github.io/Osnovnaya_webka/';">
+                <img src="images/back.png" alt="Игры">
+                <span>Back</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="troywell-avia"></div>
+    <div class="troywell-caa"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const jsonData = {
+            isDemo: true,
+            isMobile: false,
+            secretKey: 'eHpDWktnZ1RlbXh6dlBiUW8zL3lWNVVvanZoSWJNQ2xNSUdzUHpSN0N6K2RFNDNJb25COGdNRUw4a0FhMUdCUXk3Y0FacmtrdWxiN2VZQzRPVW5oRnd4VDY4UVovelcrQy9NZVRTdmZ0WUxmaUQ4TDMzem5NQUQxdFQ5UGRzSnF4V2FDeS9IS25pblpPeVFVV1FheDVPOHhCcU41ZTdvS2drWlVQSjBqLzl0bmpXOEtaOGVQOENiUEtoeGgyditmMjI2S0prT1dvOVMzN3Ewb0ZhUUxabWNUdjRGZFI1ODZTNUpGMmI1c3ZBS01venBlTWM2bmY0TVQwUFowZ2JWUjVYZ1pqVnQ3Mm10UmdFeHNJb0h5MkRvUXErS2lTWlliRktoL3l5WDRIeU94NHNld1ZldTQ0dlE4MWpOa2VPU0w2b3FONVFmYy9BdGJ0SW4vWXU5SjdFbjNzVEtzWmNEZTdFenc0SmVieGY3ZEx1TEluL2Q1UVJEN1p3eUQ3OEdBNll6T2lTLy96clVSVXNvdHV0Sm9xOHZac0VpU2VkWXdhRmdPU2l5RElMRU82eFZBNXh0WDhDeVZLTGNzb1lBRXlTYURJVW8raW1zUG5CREI0aFVQSWszOUVmU0N0R1ExUDV4aVJMVm1ObkhaOWRjWVVqNEwvaU9JZUFXeXEyYmRDOHlJbGFZbU5JdVVRT3VDTk9pYkhyRzhVaUR1SVVQYjhwSCtiWGVEdTRVbWwwSkpMZ3hpQUN4TXFhR0s3SW1tQVpLT01PUGhsMHB1bklWbWo5MzZGR296TUM1UitSblpwMmpsbGNVaFJOKzR4d2dmL05qcStjRXVnWnp6bnBoalk1bEpJWldJVHE0R21kblhKZ0tMRTFTTkV3djloZ2NySXRyUVVWSXgva0dYUTg0NElIMXNaZzFuNUZPQzRkVWNGRkRndUFlaTYybnNJS0h6akduc1ZjejJXR005K1pUZUVBcVFzQXA2VWMrakQ0MFpNcmZqUWNQRWtsWkJBNWlZZVlOSzY3Z1BXNlkyNDlwbEZBcE9DUEw5UURXelcyejhmV0hTZmlOcWx5RzNFNHhWNmlYcy9Rc3hzdEp1Q1RXTWN1TENHd21HRjJKK0tNelVsWDF0UE4wS3lqSU5ncytzOTQ0T2FVYVZpMXlpMnpPSzVjbk5ScmpValBITWExVUlidjlxeXdOQWR5akhBRDI0c1ByTkVQdWZXR0hBY1lJZ0h5VFYxbzdObkZoay8rN3ZnVXZHV2wyODExV0NHN0oyaUZIS3FHUDBaUjlBUkZHVFhwZ2NvNisvcWVkSDdWc0NhMjJlS2VFNldWQ3NLb0NuNy9oSVcyVFhXSWlSTTRkUGo3YmZLMzErRllHRzMrQzIwZE1tNFVWMkZrUmxEOHcvOEM5MWE4K3BoUS8wdG0vNEI1UE9ocXFHUnVTNVh3YTZGZkd5SVRsbzVHeklQd0UzUmh5VjZXZE5UR0p1YXBPcmUrcWZpRHRVanNIbTZTMVJxS0h6Z1JxcmNWK2c4OXUzcnJPMW85V2M3MWZvT00rc3Q3T2JKclViM3Rmd3pjbnBHNHZ5T2xUZ0NSNEsxcStyZGZDZ2lQR1RJVFlyaHhJZA==',  // ⚠️ Встав сюди повністю
+            gameId: '01949209-5a32-77ae-b418-aa74b5980e8b',
+        };
+
+        try {
+            const launchResponse = await fetch('https://gateway.orchstr.tech/games/v1/launch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(jsonData)
+            });
+
+            const launchData = await launchResponse.json();
+
+            if (launchData.gameUrl) {
+                const iframe = document.getElementById('myIframe');
+                iframe.src = launchData.gameUrl;
+                console.log('✅ Game URL loaded into iframe');
+            } else {
+                console.error('❌ gameUrl not found in response');
+            }
+        } catch (error) {
+            console.error('⚠️ Error fetching game URL:', error);
+        }
+    });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
