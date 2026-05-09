@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <title>King THIMBLES</title>
+    <style>
+        @font-face {
+            font-family: 'Intro';
+            src: url('fonts/intro.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'Halvar';
+            src: url('fonts/halvar_breitschrift.ttf') format('truetype');
+        }
+        body {
+            background: url('1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100%;
+            overflow: auto;
+            font-family: 'Intro', sans-serif;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px; 
+            margin-top: 60px;
+            width: 100%;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: 240px;
+            position: relative;
+        }
+        .container img.skull {
+            width: 110px;
+            margin: -3px;
+            transition: transform 0.5s cubic-bezier(0.32, 0.64, 0.45, 1);
+            position: relative;
+            z-index: 2;
+        }
+        #diamond {
+            position: absolute;
+            width: 120px;
+            z-index: 1;
+            display: none;
+            pointer-events: none;
+        }
+        #message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 64px;
+            margin-top: -450px;
+        }
+
+        .glass-message {
+            display: inline-block;
+            padding: 20px 38px;
+            border-radius: 32px;
+            background: rgba(255,255,255,0.12);
+            box-shadow:
+                0 4px 24px 0 rgba(0,0,0,0.12),
+                0 0 0 2px rgba(255,255,255,0.23) inset,
+                0 0 0 6px rgba(16,185,129,0.10) inset;
+            border: 2.5px solid rgba(255,255,255,0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #ffffff;
+            font-family: 'Halvar', sans-serif;
+            font-size: 2.1rem;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-align: center;
+            text-shadow: 0 2px 12px #0008, 0 1px 0 #fff4;
+            transition: box-shadow 0.2s, background 0.2s;
+            user-select: none;
+            margin: 0 auto;
+        }
+
+        .start-button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            width: 160px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #2ecc71 0%, #27ae60 100%);
+            box-shadow: 0 6px #1e8449, 0 -6px #2ecc71 inset;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            border: none;
+            font-family: 'Intro', sans-serif;
+            text-transform: uppercase;
+        }
+        .start-button:hover {
+            background: linear-gradient(145deg, #27ae60 0%, #2ecc71 100%);
+            box-shadow: 0 8px #1e8449, 0 -6px #2ecc71 inset;
+            transform: translateY(-3px);
+        }
+        .start-button:active {
+            box-shadow: 0 3px #1e8449, 0 -3px #2ecc71 inset;
+            transform: translateY(2px);
+        }
+
+        .back-button {
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            width: 112px; 
+            border-radius: 25px;
+            background: linear-gradient(145deg, #e52d27 0%, #b31217 100%);
+            box-shadow: 0 6px #9f0f0f, 0 -6px #e52d27 inset;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            font-family: 'Intro', sans-serif;
+        }
+        .back-button:hover {
+            background: linear-gradient(145deg, #b31217 0%, #e52d27 100%);
+            box-shadow: 0 8px #9f0f0f, 0 -6px #e52d27 inset;
+            transform: translateY(-3px);
+        }
+        .back-button:active {
+            box-shadow: 0 3px #9f0f0f, 0 -3px #e52d27 inset;
+            transform: translateY(2px);
+        }
+
+        .selected-skull {
+            filter: drop-shadow(0 0 40px #ffd700) brightness(1.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="1.png" alt="Череп 1" id="skull1" class="skull">
+        <img src="1.png" alt="Череп 2" id="skull2" class="skull">
+        <img src="1.png" alt="Череп 3" id="skull3" class="skull">
+        <img src="3.png" alt="Алмаз" id="diamond">
+    </div>
+
+    <div class="button-container">
+        <button class="start-button" onclick="startShuffle()">Start</button>
+        <a href="https://vadim1700.github.io/Osnovnaya_webka/" class="back-button">BACK</a>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        function startShuffle() {
+            document.getElementById('diamond').style.display = 'none';
+            document.querySelectorAll('.skull').forEach(img => {
+                img.classList.remove('selected-skull');
+                img.style.transform = '';
+            });
+            shuffleSkulls();
+        }
+
+        function shuffleSkulls() {
+            document.getElementById('message').textContent = '';
+            let skulls = document.querySelectorAll('.skull');
+            let intervals = 300;
+            let totalDuration = 3000;
+            let steps = totalDuration / intervals;
+
+            function shuffleStep(currentStep) {
+                let positions = [0, 1, 2];
+                positions.sort(() => Math.random() - 0.5);
+
+                skulls.forEach((skull, index) => {
+                    let horizontalMove = positions[index] - index;
+                    let verticalMove = Math.random() > 0.5 ? 15 : -15;
+                    skull.style.transform = `translate(${horizontalMove * 105}px, ${verticalMove}px)`;
+                });
+
+                if (currentStep < steps) {
+                    setTimeout(() => shuffleStep(currentStep + 1), intervals);
+                } else {
+                    setTimeout(() => {
+                        skulls.forEach((skull) => {
+                            skull.style.transition = 'transform 0.5s cubic-bezier(0.32, 0.64, 0.45, 1)';
+                            skull.style.transform = '';
+                        });
+                        setTimeout(displayRandomMessage, 500);
+                    }, intervals);
+                }
+            }
+
+            shuffleStep(1);
+        }
+
+        function displayRandomMessage() {
+            const messages = ["RIGHT", "MIDDLE", "LEFT"];
+            const skullIds = ["skull3", "skull2", "skull1"];
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            document.getElementById('message').innerHTML =
+            `<span class="glass-message">${messages[randomIndex]}</span>`;
+
+
+            document.querySelectorAll('.skull').forEach(img => {
+                img.classList.remove('selected-skull');
+                img.style.transform = '';
+            });
+
+            const selectedSkull = document.getElementById(skullIds[randomIndex]);
+            selectedSkull.classList.add('selected-skull');
+            selectedSkull.style.transform = 'translateY(-23px)';
+
+            const diamond = document.getElementById('diamond');
+            diamond.style.display = 'block';
+
+            const skullRect = selectedSkull.getBoundingClientRect();
+            const containerRect = document.querySelector('.container').getBoundingClientRect();
+
+            const diamondLeft = skullRect.left - containerRect.left + (selectedSkull.offsetWidth - diamond.offsetWidth) / 5;
+            const diamondTop = skullRect.bottom - containerRect.top - diamond.offsetHeight + 45;
+
+            diamond.style.left = diamondLeft + 'px';
+            diamond.style.top = diamondTop + 'px';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chicken Subway</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Экран загрузки -->
+    <div id="loader">
+        <img src="intro.png" alt="Logo" class="loader-logo">
+        <div class="progress-wrapper">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div id="app" class="hidden">
+        <header>
+            <div class="header-left">
+                <img src="intro.png" alt="logo" class="header-logo">
+                <h1 id="game-title">Chicken Subway</h1>
+            </div>
+            <div class="lang-switch">
+                <span id="ru-btn" class="active" onclick="changeLang('ru')">RU</span>
+                <span id="en-btn" onclick="changeLang('en')">EN</span>
+            </div>
+        </header>
+
+        <main>
+            <div id="signal-container">
+                <div id="signal-content">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="get-signal-btn" onclick="handleSignal()">Получить сигнал</button>
+                
+                <!-- Контейнер таймера разбит на части, чтобы перевод не ломал логику -->
+                <div id="cooldown-box" class="hidden">
+                    <p>
+                        <span id="cooldown-label">Подождите:</span> 
+                        <span id="timer">15</span> 
+                        <span id="sec-label">сек.</span>
+                    </p>
+                </div>
+
+                <button id="back-btn" class="back-btn" onclick="window.location.href='https://vadim1700.github.io/Osnovnaya_webka/'">
+    НАЗАД
+</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
