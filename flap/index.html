@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Signals</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div class="main-container">
+
+  <!-- Верхняя панель -->
+  <div class="top-bar">
+    <div class="mode-switch">
+      <span id="mode-label">ЛЕГКИЙ</span>
+      <label class="switch mode">
+        <input type="checkbox" id="mode-toggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="lang-switch">
+      <label class="switch">
+        <input type="checkbox" id="lang-toggle">
+        <span class="slider"></span>
+      </label>
+      <span id="lang-label">RU</span>
+    </div>
+  </div>
+
+  <!-- Игровая зона -->
+  <div class="app-area">
+
+    <div class="bird-background"></div>
+
+    <!-- ВОТ ПРАВИЛЬНОЕ МЕСТО ДЛЯ ЛОАДЕРА И СИГНАЛА -->
+    <div class="signal-value" id="signal-value">
+      <div id="loader" class="loader" style="display:none;"></div>
+      <span id="signal-text">--</span>
+    </div>
+
+    <div class="status-box" id="status-box">ОЖИДАНИЕ</div>
+
+    <div class="controls">
+      <button class="btn btn-blue" id="get-signal">ПОЛУЧИТЬ СИГНАЛ</button>
+      <button class="btn btn-yellow" id="reset-signal">НАЗАД</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
