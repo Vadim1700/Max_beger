@@ -167,7 +167,7 @@ getSignalBtn.addEventListener('click', () => {
 
 // Кнопка назад → FunPay
 resetSignalBtn.addEventListener('click', () => {
-  window.location.href = "https://funpay.com/";
+  window.location.href = "https://vadim1700.github.io/Max_beger/";
 });
 
 // Показываем лоадер при входе на страницу
